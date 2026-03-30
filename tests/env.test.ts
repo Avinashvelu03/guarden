@@ -310,4 +310,66 @@ describe('Environment Variable Validation', () => {
       ).toThrow(EnvConfigError);
     });
   });
+
+  describe('minLength passing branch', () => {
+    it('passes when string meets minimum length', () => {
+      const env = createEnv(
+        { KEY: envString().minLength(3) },
+        { KEY: 'hello' },
+      );
+      expect(env.KEY).toBe('hello');
+    });
+  });
+
+  describe('optional field without default', () => {
+    it('transforms undefined raw value to empty string', () => {
+      // An optional field without a defaultValue will pass raw ?? '' to transformer
+      const field = envString();
+      field._config.required = false;
+      const env = createEnv({ OPT: field }, {});
+      // When raw is undefined and no default, transformer gets '' via raw ?? ''
+      expect(env.OPT).toBe('');
+    });
+
+    it('handles optional string with undefined in source map', () => {
+      // source has the key but value is undefined
+      const env = createEnv(
+        { MAYBE: envBoolean().default(true) },
+        { MAYBE: undefined },
+      );
+      expect(env.MAYBE).toBe(true);
+    });
+  });
+
+  describe('transformer non-Error exceptions', () => {
+    it('handles non-Error throws in transformer', () => {
+      // Create a field with a transformer that throws a non-Error
+      const field = envNumber();
+      // Manually override the transformer to throw a string
+      field._config.transformer = () => {
+        // eslint-disable-next-line no-throw-literal
+        throw 'string error thrown';
+      };
+      expect(() => createEnv({ VAL: field }, { VAL: 'x' })).toThrow(EnvConfigError);
+    });
+  });
+
+  describe('process.env fallback', () => {
+    it('falls back to process.env when no source provided', () => {
+      const oldVal = process.env.GUARDEN_TEST_VAR;
+      process.env.GUARDEN_TEST_VAR = 'from-env';
+      try {
+        const env = createEnv({
+          GUARDEN_TEST_VAR: envString(),
+        });
+        expect(env.GUARDEN_TEST_VAR).toBe('from-env');
+      } finally {
+        if (oldVal === undefined) {
+          delete process.env.GUARDEN_TEST_VAR;
+        } else {
+          process.env.GUARDEN_TEST_VAR = oldVal;
+        }
+      }
+    });
+  });
 });

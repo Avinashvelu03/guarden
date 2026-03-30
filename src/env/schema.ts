@@ -308,7 +308,7 @@ export function createEnv<T extends EnvSchema>(
   schema: T,
   source?: Record<string, string | undefined>,
 ): InferEnv<T> {
-  const envSource = source ?? (typeof process !== 'undefined' ? process.env : {});
+  const envSource = source ?? process.env;
   const result: Record<string, EnvValue> = {};
   const errors: EnvValidationError[] = [];
 

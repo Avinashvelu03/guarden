@@ -111,7 +111,7 @@ export function escapeHtml(value: string): string {
     "'": '&#x27;',
     '`': '&#x60;',
   };
-  return value.replace(/[&<>"'`]/g, (char) => escapeMap[char] ?? char);
+  return value.replace(/[&<>"'`]/g, (char) => escapeMap[char]);
 }
 
 /**
@@ -126,7 +126,7 @@ export function unescapeHtml(value: string): string {
     '&#x27;': "'",
     '&#x60;': '`',
   };
-  return value.replace(/&(?:amp|lt|gt|quot|#x27|#x60);/g, (entity) => unescapeMap[entity] ?? entity);
+  return value.replace(/&(?:amp|lt|gt|quot|#x27|#x60);/g, (entity) => unescapeMap[entity]);
 }
 
 /**
