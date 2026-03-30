@@ -154,6 +154,13 @@ describe('Coerce', () => {
       expect(toBoolean(0)).toBe(false);
       expect(toBoolean(-1)).toBe(true);
     });
+
+    it('converts other types via Boolean()', () => {
+      expect(toBoolean(null)).toBe(false);
+      expect(toBoolean(undefined)).toBe(false);
+      expect(toBoolean({})).toBe(true);
+      expect(toBoolean([])).toBe(true);
+    });
   });
 
   describe('toDate', () => {
@@ -238,6 +245,7 @@ describe('Sanitize', () => {
       expect(camelCase('foo-bar-baz')).toBe('fooBarBaz');
       expect(camelCase('foo_bar')).toBe('fooBar');
       expect(camelCase('FooBar')).toBe('fooBar');
+      expect(camelCase('trailing-')).toBe('trailing');
     });
 
     it('kebabCase', () => {
@@ -265,11 +273,14 @@ describe('Sanitize', () => {
       );
       expect(escapeHtml('a & b')).toBe('a &amp; b');
       expect(escapeHtml("it's")).toBe("it&#x27;s");
+      expect(escapeHtml('code: `hello`')).toBe('code: &#x60;hello&#x60;');
     });
 
     it('unescapeHtml unescapes entities', () => {
       expect(unescapeHtml('&lt;div&gt;')).toBe('<div>');
       expect(unescapeHtml('a &amp; b')).toBe('a & b');
+      expect(unescapeHtml('&#x60;code&#x60;')).toBe('`code`');
+      expect(unescapeHtml('&#x27;quoted&#x27;')).toBe("'quoted'");
     });
   });
 

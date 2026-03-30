@@ -625,6 +625,14 @@ describe('Guard Combinators', () => {
       expect(isUser(null)).toBe(false);
       expect(isUser('not an object')).toBe(false);
     });
+
+    it('handles inherited prototype properties', () => {
+      const schema = Object.create({ inherited: isString });
+      schema.own = isNumber;
+      const guard = shape(schema);
+      // Only own properties tested, inherited skipped
+      expect(guard({ own: 42 })).toBe(true);
+    });
   });
 
   describe('tuple', () => {
@@ -674,6 +682,13 @@ describe('Guard Combinators', () => {
       expect(isNumberRecord({ a: 'string' })).toBe(false);
       expect(isNumberRecord([])).toBe(false);
       expect(isNumberRecord(null)).toBe(false);
+    });
+    it('handles inherited prototype properties', () => {
+      const obj = Object.create({ inherited: 'not a number' });
+      obj.own = 42;
+      const guard = recordOf(isNumber);
+      // Only own properties tested, inherited skipped
+      expect(guard(obj)).toBe(true);
     });
   });
 

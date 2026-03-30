@@ -203,6 +203,12 @@ describe('Result', () => {
       expect(result.isErr()).toBe(true);
     });
 
+    it('fromPromise() wraps non-Error rejections', async () => {
+      const result = await ResultUtils.fromPromise(Promise.reject('string rejection'));
+      expect(result.isErr()).toBe(true);
+      expect(result.unwrapErr().message).toBe('string rejection');
+    });
+
     it('all() collects results', () => {
       const results = [Ok(1), Ok(2), Ok(3)];
       const all = ResultUtils.all(results);

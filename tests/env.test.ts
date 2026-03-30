@@ -253,6 +253,53 @@ describe('Environment Variable Validation', () => {
     });
   });
 
+  describe('required() method chains', () => {
+    it('envString().required() works', () => {
+      const env = createEnv(
+        { NAME: envString().default('x').required() },
+        { NAME: 'hello' },
+      );
+      expect(env.NAME).toBe('hello');
+    });
+
+    it('envNumber().required() works', () => {
+      const env = createEnv(
+        { PORT: envNumber().default(3000).required() },
+        { PORT: '8080' },
+      );
+      expect(env.PORT).toBe(8080);
+    });
+
+    it('envBoolean().required() works', () => {
+      const env = createEnv(
+        { FLAG: envBoolean().default(false).required() },
+        { FLAG: 'true' },
+      );
+      expect(env.FLAG).toBe(true);
+    });
+  });
+
+  describe('base EnvField.default()', () => {
+    it('works via envEnum with default', () => {
+      const field = envEnum(['a', 'b'] as const).default('a');
+      const env = createEnv({ VAL: field }, {});
+      expect(env.VAL).toBe('a');
+    });
+
+    it('envEnum().required() works', () => {
+      const field = envEnum(['a', 'b'] as const).required();
+      const env = createEnv({ VAL: field }, { VAL: 'b' });
+      expect(env.VAL).toBe('b');
+    });
+
+    it('envEnum().validate() works', () => {
+      const field = envEnum(['a', 'b'] as const).validate(
+        (v) => v === 'a' ? null : 'must be a',
+      );
+      expect(() => createEnv({ VAL: field }, { VAL: 'b' })).toThrow(EnvConfigError);
+    });
+  });
+
   describe('empty string handling', () => {
     it('treats empty string as missing for required fields', () => {
       expect(() =>
