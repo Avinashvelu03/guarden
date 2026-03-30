@@ -7,7 +7,8 @@
 [![npm version](https://img.shields.io/npm/v/guarden.svg?style=flat-square&color=cb3837)](https://www.npmjs.com/package/guarden)
 [![bundle size](https://img.shields.io/bundlephobia/minzip/guarden?style=flat-square&color=6ead0a)](https://bundlephobia.com/package/guarden)
 [![license](https://img.shields.io/npm/l/guarden.svg?style=flat-square&color=blue)](https://github.com/Avinashvelu03/guarden/blob/main/LICENSE)
-[![tests](https://img.shields.io/badge/tests-298%20passed-brightgreen?style=flat-square)](https://github.com/Avinashvelu03/guarden/actions)
+[![tests](https://img.shields.io/badge/tests-313%20passed-brightgreen?style=flat-square)](https://github.com/Avinashvelu03/guarden/actions)
+[![coverage](https://img.shields.io/badge/coverage-100%25-brightgreen?style=flat-square)](https://github.com/Avinashvelu03/guarden)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.5+-3178c6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![zero deps](https://img.shields.io/badge/dependencies-0-success?style=flat-square)](https://www.npmjs.com/package/guarden)
 
@@ -27,7 +28,7 @@ Blazing-fast, tree-shakeable utilities for bridging TypeScript's compile-time sa
 - ⚡ **Zero dependencies** — nothing to audit, nothing to break
 - 🌳 **Tree-shakeable** — import only what you use
 - 📦 **Dual ESM/CJS** — works everywhere
-- 🧪 **298 tests** — battle-tested reliability
+- 🧪 **313 tests** with **100% coverage** (statements, branches, functions, lines)
 - 🎯 **TypeScript-first** — written in TypeScript, for TypeScript
 - 🏗️ **5 modules** — Guards, Assert, Result/Option, Transform, Env
 
