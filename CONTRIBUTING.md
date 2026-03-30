@@ -31,7 +31,7 @@ npm run build
 ## Code Standards
 
 - **TypeScript**: All code must be written in TypeScript with strict mode
-- **Testing**: All new features must include tests (target 95%+ coverage)
+- **Testing**: All new features must include tests (target 100% coverage)
 - **Linting**: Code must pass ESLint checks (`npm run lint`)
 - **Formatting**: Use Prettier for consistent formatting (`npm run format`)
 
