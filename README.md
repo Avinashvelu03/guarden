@@ -14,7 +14,7 @@
 
 **Guard your runtime. Harden your types.**
 
-Blazing-fast, tree-shakeable utilities for bridging TypeScript's compile-time safety with real-world runtime guarantees. Type guards, assertions, Result/Option monads, data pipelines, and environment validation — all in one lightweight, zero-dependency package.
+Blazing-fast, tree-shakeable utilities for bridging TypeScript’s compile-time safety with real-world runtime guarantees. Type guards, assertions, Result/Option monads, data pipelines, and environment validation — all in one lightweight, zero-dependency package.
 
 [Getting Started](#-getting-started) · [API Reference](#-api-reference) · [Why Guarden?](#-why-guarden) · [Contributing](CONTRIBUTING.md)
 
@@ -38,13 +38,7 @@ Blazing-fast, tree-shakeable utilities for bridging TypeScript's compile-time sa
 
 ```bash
 npm install guarden
-```
-
-```bash
 yarn add guarden
-```
-
-```bash
 pnpm add guarden
 ```
 
@@ -66,11 +60,7 @@ if (isString(input)) {
 }
 
 // 🏗️ Object Shape Validation
-const isUser = shape({
-  name: isString,
-  age: isNumber,
-});
-
+const isUser = shape({ name: isString, age: isNumber });
 if (isUser(data)) {
   console.log(data.name); // ✅ Fully typed
 }
@@ -87,23 +77,13 @@ divide(10, 2).match({
 });
 
 // 🔄 Data Pipelines
-const slug = pipe(
-  '  Hello, World! 🌍  ',
-  (s) => s.trim(),
-  slugify,
-);
+const slug = pipe('  Hello, World! 🌍  ', (s) => s.trim(), slugify);
 // → "hello-world"
 ```
 
 ## 🔌 Modular Imports
 
-Import the entire library or just the modules you need:
-
 ```typescript
-// Full import
-import { isString, Ok, pipe } from 'guarden';
-
-// Module-specific imports (optimal tree-shaking)
 import { isString, shape, arrayOf } from 'guarden/guards';
 import { assert, invariant } from 'guarden/assert';
 import { Ok, Err, Some, None } from 'guarden/result';
@@ -115,225 +95,79 @@ import { createEnv, envString } from 'guarden/env';
 
 ### 🛡️ Guards
 
-Type guards that automatically narrow TypeScript types:
-
-#### Primitives
 ```typescript
-isString(value)          // value is string
-isNumber(value)          // value is number (excludes NaN)
-isBoolean(value)         // value is boolean
-isBigInt(value)          // value is bigint
-isSymbol(value)          // value is symbol
-isNull(value)            // value is null
-isUndefined(value)       // value is undefined
-isNullish(value)         // value is null | undefined
-isNonNullish(value)      // value is NonNullable<T>
-isFunction(value)        // value is Function
-isPrimitive(value)       // value is string | number | boolean | ...
-isFiniteNumber(value)    // value is number (excludes NaN & Infinity)
-```
+// Primitives
+isString(v) | isNumber(v) | isBoolean(v) | isNull(v) | isUndefined(v)
+isNullish(v) | isNonNullish(v) | isFunction(v) | isPrimitive(v)
 
-#### Structures
-```typescript
-isArray(value)           // value is unknown[]
-isObject(value)          // value is Record<string, unknown>
-isPlainObject(value)     // value is plain {} (not class instance)
-isMap(value)             // value is Map
-isSet(value)             // value is Set
-isDate(value)            // value is Date
-isValidDate(value)       // value is Date (valid, not NaN)
-isRegExp(value)          // value is RegExp
-isError(value)           // value is Error
-isPromise(value)         // value is Promise (or thenable)
-isTypedArray(value)      // value is Uint8Array, Float32Array, etc.
-```
+// Structures
+isArray(v) | isObject(v) | isPlainObject(v) | isDate(v) | isValidDate(v)
+isMap(v) | isSet(v) | isRegExp(v) | isError(v) | isPromise(v)
 
-#### Advanced
-```typescript
-isNonEmptyString(value)  // non-empty string
-isEmail(value)           // valid email format
-isURL(value)             // valid URL
-isUUID(value)            // valid UUID v1-v5
-isISO8601(value)         // valid ISO 8601 date string
-isJSONString(value)      // valid JSON string
-isHexColor(value)        // valid hex color (#fff, #ffffff)
-isPositiveNumber(value)  // number > 0
-isNegativeNumber(value)  // number < 0
-isInteger(value)         // integer number
-isSafeInteger(value)     // safe integer
-isNonEmptyArray(value)   // array with 1+ elements
-```
+// Advanced
+isEmail(v) | isURL(v) | isUUID(v) | isISO8601(v) | isHexColor(v)
+isPositiveNumber(v) | isInteger(v) | isNonEmptyArray(v)
 
-#### Factory Guards
-```typescript
-isInRange(0, 100)(value)              // number in range [0, 100]
-isOneOf(['a', 'b', 'c'] as const)    // value is 'a' | 'b' | 'c'
-isMatch(/^[a-z]+$/)(value)           // string matches regex
-isMinLength(3)(value)                 // string.length >= 3
-isMaxLength(100)(value)               // string.length <= 100
-isInstanceOf(TypeError)(value)        // value instanceof TypeError
-```
+// Factories
+isInRange(0, 100)(v) | isOneOf(['a','b'] as const)(v)
+isMinLength(3)(v) | isInstanceOf(TypeError)(v)
 
-#### Combinators
-```typescript
-// Compose guards for complex validation
-const isPositiveInt = and(isInteger, isPositiveNumber);
-const isStringOrNum = or(isString, isNumber);
-const isNotNull = not(isNull);
-
-// Object shape validation
-const isUser = shape({
-  name: isString,
-  age: isNumber,
-  email: isEmail,
-});
-
-// Collection guards
+// Combinators
+const guard = and(isInteger, isPositiveNumber);
+const isUser = shape({ name: isString, age: isNumber });
 const isStringArray = arrayOf(isString);
-const isCoord = tuple(isNumber, isNumber);
-const isScoreMap = mapOf(isString, isNumber);
-const isConfig = recordOf(isString);
-
-// Refinement
-const isEven = refine(isNumber, n => n % 2 === 0);
-
-// Optional/Nullable
-const isOptName = optional(isString);  // string | undefined
-const isNullName = nullable(isString); // string | null
 ```
-
----
 
 ### ✅ Assert
 
-Runtime assertions with TypeScript type narrowing:
-
 ```typescript
-// Basic assertion
-assert(condition, 'Something went wrong');
-
-// Narrowing assertions
+assert(condition, 'msg');
 assertDefined(value);       // narrows away undefined
 assertNonNull(value);       // narrows away null | undefined
-assertType(value, isString); // narrows to string
-assertTruthy(value);        // narrows away falsy values
-
-// Invariant (for bug detection)
-invariant(items.length > 0, 'items should never be empty here');
-
-// Exhaustive checking
-type Dir = 'up' | 'down';
-function move(dir: Dir) {
-  switch (dir) {
-    case 'up': return goUp();
-    case 'down': return goDown();
-    default: unreachable(dir); // compile error if case missing!
-  }
-}
+assertType(value, isString);
+invariant(items.length > 0, 'bug!');
+unreachable(dir);           // exhaustive switch checking
 ```
-
----
 
 ### 🎯 Result & Option
 
-Rust-inspired monadic error handling:
-
 ```typescript
-// Result<T, E> — explicit success/failure
 const result = Ok(42);
-result.map(v => v * 2);           // Ok(84)
-result.andThen(v => Ok(v + 1));   // Ok(43)
-result.unwrapOr(0);               // 42
-result.match({
-  ok: v => `Got ${v}`,
-  err: e => `Failed: ${e}`,
-});
+result.map(v => v * 2);
+result.unwrapOr(0);
+result.match({ ok: v => v, err: e => e });
 
-// Catch exceptions safely
 const parsed = ResultUtils.from(() => JSON.parse(input));
+const data = await ResultAsync.from(fetch('/api')).map(r => r.json()).unwrapOr(null);
 
-// Async support
-const data = await ResultAsync.from(fetch('/api'))
-  .map(res => res.json())
-  .unwrapOr(defaultData);
-
-// Option<T> — explicit null handling
-const user = OptionUtils.from(getUserById(id));
-const name = user.map(u => u.name).unwrapOr('Anonymous');
-
-// Collect multiple Results
-const all = ResultUtils.all([Ok(1), Ok(2), Ok(3)]); // Ok([1, 2, 3])
+const all = ResultUtils.all([Ok(1), Ok(2)]); // Ok([1, 2])
 ```
-
----
 
 ### 🔄 Transform
 
-Type-safe data pipelines and string utilities:
-
 ```typescript
-// Pipe — chain transformations
-const result = pipe(
-  '  Hello World  ',
-  trim,
-  lowercase,
-  slugify,
-); // → "hello-world"
-
-// Flow — create reusable pipelines
+pipe('  Hello World  ', trim, lowercase, slugify); // "hello-world"
 const processTitle = flow(trim, capitalize, (s) => truncate(s, 50));
-processTitle('  hello world  '); // → "Hello world"
 
-// Type coercion (returns Result!)
-toNumber('42');          // Ok(42)
-toNumber('abc');         // Err(CoercionError)
-toBoolean('yes');        // true
-toDate('2024-01-15');    // Ok(Date)
-toArray(42);             // [42]
-toArray([1, 2]);         // [1, 2]
-toArray(null);           // []
-
-// String sanitization
-camelCase('hello world');         // "helloWorld"
-kebabCase('helloWorld');          // "hello-world"
-snakeCase('helloWorld');          // "hello_world"
-slugify('Hello, World! 🌍');     // "hello-world"
-escapeHtml('<script>alert(1)');   // "&lt;script&gt;alert(1)"
-truncate('Long text...', 10);    // "Long te..."
-stripHtml('<p>Hello</p>');       // "Hello"
-collapseWhitespace('a  b   c');  // "a b c"
-reverse('hello');                 // "olleh"
-countOccurrences('aaa', 'a');    // 3 (non-overlapping: 3)
+toNumber('42')           // Ok(42)
+escapeHtml('<script>')   // "&lt;script&gt;"
+camelCase('hello world') // "helloWorld"
+slugify('Hello! 🌍')    // "hello"
 ```
-
----
 
 ### 🌍 Env
 
-Validated, type-safe environment variables:
-
 ```typescript
-import { createEnv, envString, envNumber, envBoolean, envEnum } from 'guarden/env';
-
 export const env = createEnv({
   DATABASE_URL: envString().url().required(),
   PORT: envNumber().port().default(3000),
   DEBUG: envBoolean().default(false),
   NODE_ENV: envEnum(['development', 'production', 'test'] as const),
-  API_KEY: envString().minLength(16),
-  ALLOWED_ORIGINS: envString().matches(/^https?:\/\//),
 });
 
-// Fully typed! 🎉
 env.DATABASE_URL  // string
 env.PORT          // number
 env.DEBUG         // boolean
-env.NODE_ENV      // 'development' | 'production' | 'test'
-
-// Throws descriptive errors at startup if invalid:
-// EnvConfigError: Environment configuration is invalid:
-//   DATABASE_URL: is required but not set
-//   PORT: must be a valid port (1-65535)
 ```
 
 ---
@@ -348,15 +182,12 @@ env.NODE_ENV      // 'development' | 'production' | 'test'
 | Data Transform | ✅ | ✅ (parse) | ❌ | ❌ |
 | Env Validation | ✅ | 🔶 (manual) | ❌ | ❌ |
 | Zero Dependencies | ✅ | ✅ | ✅ | ✅ |
-| Tree-Shakeable | ✅ | 🔶 | ✅ | ✅ |
 | Bundle Size | ~3KB | ~14KB | ~5KB | ~3KB |
-
-**Guarden** is the only library that provides a **complete runtime safety toolkit** in one package. Instead of installing 4+ separate libraries, get everything you need from one dependency.
 
 ## 🔧 Requirements
 
 - **Node.js** >= 18.0.0
-- **TypeScript** >= 5.0 (recommended 5.5+)
+- **TypeScript** >= 5.0
 
 ## 📄 License
 
@@ -364,8 +195,32 @@ env.NODE_ENV      // 'development' | 'production' | 'test'
 
 ---
 
+## Guard the Dev — Support Guarden
+
 <div align="center">
 
-**If Guarden helps your project, consider giving it a ⭐ on [GitHub](https://github.com/Avinashvelu03/guarden)!**
+```
+  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+  ▓  ▄▄▄     ▄▄▄  ▄▄▄ ▄   ▄ ▄▄▄▄▄  ▄▄▄▄  ▄▄▄  ▓
+  ▓ █████   █████ █████████ ███████ ██████ ███ ▓
+  ▓ ███     ███ ███ ███ ███ ███    ███ ███ ▓
+  ▓ █████   █████ █████████ ███ ███    ██████ ███ ▓
+  ▓ ███     ███ ███ ███ ███ ███    ███    ███ ▓
+  ▓ ███████ ███ ███ ███ ███ ███████ ███    ███ ▓
+  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+```
+
+> *Guarden guards your runtime for free.*
+> *A star, a sponsor, or a share keeps it alive and growing.*
+
+[![Ko-fi](https://img.shields.io/badge/☕_Ko--fi-Guard_the_Dev-FF5E5B?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/avinashvelu)
+[![GitHub Sponsors](https://img.shields.io/badge/🛡️_GitHub-Sponsor_Guarden-EA4AAA?style=for-the-badge&logo=github&logoColor=white)](https://github.com/sponsors/Avinashvelu03)
+
+**Free ways to support:**
+- ⭐ [Star on GitHub](https://github.com/Avinashvelu03/guarden)
+- 🐛 [File issues or feature requests](https://github.com/Avinashvelu03/guarden/issues)
+- 🗣️ Recommend Guarden to TypeScript devs who care about runtime safety
+
+*Built with ❤️ by [Avinash Velu](https://github.com/Avinashvelu03)*
 
 </div>
