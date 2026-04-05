@@ -15,6 +15,7 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/no-explicit-any': 'warn',
     '@typescript-eslint/prefer-as-const': 'error',
+    '@typescript-eslint/ban-types': 'off',
     'no-console': 'warn',
   },
   ignorePatterns: ['dist/', 'node_modules/', 'coverage/', '*.cjs'],
