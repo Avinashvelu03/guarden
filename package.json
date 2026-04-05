@@ -1,6 +1,6 @@
 {
   "name": "guarden",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Blazing-fast, tree-shakeable TypeScript-first runtime safety toolkit. Type guards, assertions, Result/Option monads, data pipelines, and env validation — zero dependencies.",
   "author": "Avinashvelu03",
   "sideEffects": false,
