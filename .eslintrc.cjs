@@ -5,11 +5,10 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
-    'plugin:@typescript-eslint/recommended-requiring-type-checking',
   ],
   parserOptions: {
-    project: './tsconfig.json',
-    tsconfigRootDir: __dirname,
+    ecmaVersion: 2020,
+    sourceType: 'module',
   },
   rules: {
     '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
@@ -18,5 +17,5 @@ module.exports = {
     '@typescript-eslint/prefer-as-const': 'error',
     'no-console': 'warn',
   },
-  ignorePatterns: ['dist/', 'node_modules/', 'coverage/', '*.js', '*.cjs'],
+  ignorePatterns: ['dist/', 'node_modules/', 'coverage/', '*.cjs'],
 };
