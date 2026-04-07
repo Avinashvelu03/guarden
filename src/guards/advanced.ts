@@ -18,8 +18,11 @@ export function isNonEmptyString(value: unknown): value is string {
  */
 export function isEmail(value: unknown): value is string {
   if (typeof value !== 'string') return false;
-  // RFC 5322 simplified pattern
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    // Linear-time email structure check (avoids ReDoS)
+    const atIdx = value.indexOf('@');
+    if (atIdx < 1 || atIdx !== value.lastIndexOf('@')) return false;
+    const dotIdx = value.lastIndexOf('.');
+    return dotIdx > atIdx + 1 && dotIdx < value.length - 1;
 }
 
 /**
