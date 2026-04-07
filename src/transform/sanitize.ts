@@ -90,7 +90,15 @@ export function snakeCase(value: string): string {
  * ```
  */
 export function stripHtml(value: string): string {
-  return value.replace(/<[^>]*>/g, '');
+  let result = value;
+    let start = result.indexOf('<');
+    while (start !== -1) {
+          const end = result.indexOf('>', start);
+          if (end === -1) { result = result.slice(0, start); break; }
+          result = result.slice(0, start) + result.slice(end + 1);
+          start = result.indexOf('<', start);
+        }
+    return result;
 }
 
 /**
