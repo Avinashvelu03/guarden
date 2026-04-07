@@ -5,7 +5,6 @@
 ### TypeScript-First Runtime Safety Toolkit
 
 [![npm version](https://img.shields.io/npm/v/guarden.svg?style=flat-square&color=cb3837)](https://www.npmjs.com/package/guarden)
-[![bundle size](https://img.shields.io/bundlephobia/minzip/guarden?style=flat-square&color=6ead0a)](https://bundlephobia.com/package/guarden)
 [![license](https://img.shields.io/npm/l/guarden.svg?style=flat-square&color=blue)](https://github.com/Avinashvelu03/guarden/blob/main/LICENSE)
 [![tests](https://img.shields.io/badge/tests-313%20passed-brightgreen?style=flat-square)](https://github.com/Avinashvelu03/guarden/actions)
 [![coverage](https://img.shields.io/badge/coverage-100%25-brightgreen?style=flat-square)](https://github.com/Avinashvelu03/guarden)
