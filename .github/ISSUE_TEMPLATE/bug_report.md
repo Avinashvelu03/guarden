@@ -1,18 +1,22 @@
 ---
-name: Bug Report
-about: Report a bug in guarden
-title: '[BUG] '
+name: Bug report
+about: Create a report to help us improve
 labels: bug
-assignees: Avinashvelu03
 ---
 
-## Describe the bug
+**Describe the bug**
+A clear description of what the bug is.
 
-## To Reproduce
+**To Reproduce**
+Steps to reproduce the behavior.
 
-## Expected behavior
+**Expected behavior**
+What you expected to happen.
 
-## Environment
+**Environment**
 - guarden version:
-- Runtime:
+- Node.js version:
 - OS:
+
+**Additional context**
+Any other context or screenshots.

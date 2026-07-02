@@ -1,13 +1,17 @@
 ---
-name: Feature Request
-about: Suggest a new feature for guarden
-title: '[FEAT] '
+name: Feature request
+about: Suggest an idea for guarden
 labels: enhancement
-assignees: Avinashvelu03
 ---
 
-## Problem
+**Is your feature request related to a problem?**
+Describe the problem.
 
-## Proposed Solution
+**Describe the solution you'd like**
+A clear description of what you want.
 
-## Alternatives
+**Alternatives considered**
+Any alternative solutions you've considered.
+
+**Additional context**
+Any other context or mockups.
